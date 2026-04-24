@@ -55,16 +55,6 @@ git clone git@github.com:uspenskiisergei/Advisors.git .
 
 ---
 
-## 📖 Быстрая установка
-
-```bash
-mkdir ~/Advisors && cd ~/Advisors && git clone git@github.com:uspenskiisergei/Advisors.git .
-```
-
-Затем откройте папку в OpenWork.
-
----
-
 ## 🧠 Мыслители
 
 | Мыслитель | Зона знаний |
