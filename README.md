@@ -1,3 +1,4 @@
+<img width="1536" height="1024" alt="img_69eb687a4ea925 66840900" src="https://github.com/user-attachments/assets/e7773916-e334-4b42-98ba-fe61725553c9" />
 # Advisors (Советники)
 
 Система философского мышления. 11 великих мыслителей в твоей команде.
