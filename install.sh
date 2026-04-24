@@ -1,73 +1,32 @@
 #!/bin/bash
 
-# Advisors — Установщик для macOS
-# curl -s https://.../install.sh | bash
+# Advisors — Быстрая установка
+# Скачивает проект в текущую папку
 
 set -e
-
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-RED='\033[0;31m'
-NC='\033[0m'
-PROJECT_DIR="$HOME/Advisors"
-
-step() { echo -e "${GREEN}➜${NC} $1"; }
-ok() { echo -e "${GREEN}✅${NC} $1"; }
-fail() { echo -e "${RED}❌${NC} $1"; }
-
-if [[ "$OSTYPE" != "darwin"* ]]; then
-    fail "Только для macOS!"
-    exit 1
-fi
 
 echo ""
 echo "🤖 Advisors — Система философского мышления"
 echo "============================================"
 echo ""
 
-step "Проверяем OpenWork..."
-if command -v opencode &> /dev/null; then
-    ok "OpenWork уже установлен"
-else
-    step "Устанавливаем OpenWork..."
-    if command -v brew &> /dev/null; then
-        brew install opencode-ai/opencode/opencode 2>/dev/null || install_direct
-    else
-        install_direct
-    fi
-    ok "OpenWork установлен"
+echo "Этот скрипт скачает проект Advisors"
+echo "в текущую папку: $(pwd)"
+echo ""
+
+if [ -f "opencode.jsonc" ]; then
+    echo "⚠️  Папка уже содержит проект. Откройте её в OpenWork."
+    exit 0
 fi
 
-install_direct() {
-    ARCH=$([[ $(uname -m) == 'arm64' ]] && echo "arm64" || echo "x64")
-    TMP="/tmp/opencode-$$"
-    curl -L -o "$TMP" "https://github.com/opencode-ai/opencode/releases/latest/download/opencode-darwin-${ARCH}"
-    chmod +x "$TMP"
-    if [ -w /usr/local/bin ]; then
-        sudo mv "$TMP" /usr/local/bin/opencode
-    else
-        mkdir -p "$HOME/bin"
-        mv "$TMP" "$HOME/bin/opencode"
-        export PATH="$HOME/bin:$PATH"
-    fi
-}
-
-step "Скачиваем проект..."
-if [ -d "$PROJECT_DIR" ]; then
-    cd "$PROJECT_DIR" && git pull origin main 2>/dev/null
-    ok "Проект обновлён"
-else
-    git clone git@github.com:uspenskiisergei/Advisors.git "$PROJECT_DIR"
-    ok "Проект скачан"
-fi
+echo "Скачиваем..."
+git clone git@github.com:uspenskiisergei/Advisors.git .
 
 echo ""
 echo "============================================"
-ok "Всё готово!"
+echo "✅ Готово!"
 echo "============================================"
 echo ""
-echo "Запускаем OpenWork..."
+echo "1. Откройте эту папку в OpenWork"
+echo "2. Напишите: «Хочу философскую сессию»"
 echo ""
-
-cd "$PROJECT_DIR"
-opencode "$PROJECT_DIR"
