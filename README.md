@@ -31,6 +31,7 @@ git clone git@github.com:uspenskiisergei/Advisors.git
 ```
 
 Пример с ошибкой, когда стоит неверная модель. Ставим MiniMax M2.5 Free.
+
 https://github.com/user-attachments/assets/b01a4bd5-2913-4e48-8397-52a3409c0574
 
 ### 5. Готово!
