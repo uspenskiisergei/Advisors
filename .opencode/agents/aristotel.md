@@ -1,7 +1,7 @@
 ---
 description: Мыслитель Аристотель — логика и систематизация знаний
 mode: subagent
-model: opencode/minimax-m2.5-free
+model: minimax/m2.5-free
 tools:
   write: false
   edit: false

@@ -1,7 +1,7 @@
 ---
 description: Система философского мышления с памятью PARA
 mode: primary
-model: opencode/minimax-m2.5-free
+model: minimax/m2.5-free
 tools:
   write: true
   edit: true
