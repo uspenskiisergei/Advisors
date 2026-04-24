@@ -14,12 +14,7 @@
 
 ### 2. Создайте папку
 
-```bash
-mkdir ~/Advisors
-cd ~/Advisors
-```
-
-Или вручную в Finder.
+Вручную в Finder
 
 ### 3. Откройте папку в OpenWork
 
