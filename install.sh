@@ -34,42 +34,51 @@ echo "============================================"
 echo ""
 
 # OpenCode
-step "Проверяем OpenCode..."
+step "Проверяем OpenWork..."
 if command -v opencode &> /dev/null; then
-    ok "OpenCode уже установлен"
+    ok "OpenWork уже установлен"
 else
-    step "Устанавливаем OpenCode..."
+    step "Устанавливаем OpenWork..."
     if command -v brew &> /dev/null; then
-        brew install opencode-ai/opencode/opencode 2>/dev/null || {
-            ARCH=$([[ $(uname -m) == 'arm64' ]] && echo "arm64" || echo "x64")
-            curl -L -o /tmp/opencode "https://github.com/opencode-ai/opencode/releases/latest/download/opencode-darwin-${ARCH}"
-            chmod +x /tmp/opencode
-            [ -w /usr/local/bin ] && sudo mv /tmp/opencode /usr/local/bin/opencode || {
-                mkdir -p "$HOME/bin"
-                mv /tmp/opencode "$HOME/bin/opencode"
-            }
-        }
-        ok "OpenCode установлен"
+        brew install opencode-ai/opencode/opencode 2>/dev/null || install_direct
+    else
+        install_direct
     fi
+    ok "OpenWork установлен"
 fi
+
+install_direct() {
+    ARCH=$([[ $(uname -m) == 'arm64' ]] && echo "arm64" || echo "x64")
+    TMP="/tmp/opencode-$$"
+    curl -L -o "$TMP" "https://github.com/opencode-ai/opencode/releases/latest/download/opencode-darwin-${ARCH}"
+    chmod +x "$TMP"
+    if [ -w /usr/local/bin ]; then
+        sudo mv "$TMP" /usr/local/bin/opencode
+    else
+        mkdir -p "$HOME/bin"
+        mv "$TMP" "$HOME/bin/opencode"
+        export PATH="$HOME/bin:$PATH"
+    fi
+}
 
 # Проект
 step "Скачиваем проект..."
 if [ -d "$PROJECT_DIR" ]; then
     cd "$PROJECT_DIR" && git pull origin main 2>/dev/null
-    ok "Проект обновлён"
+    ok "Проект обновлён в $PROJECT_DIR"
 else
     git clone git@github.com:uspenskiisergei/Advisors.git "$PROJECT_DIR"
-    ok "Проект скачан"
+    ok "Проект скачан в $PROJECT_DIR"
 fi
 
 echo ""
 echo "============================================"
-ok "Установка завершена!"
+ok "Всё готово!"
 echo "============================================"
 echo ""
-echo "Запуск:"
-echo "  cd $PROJECT_DIR && opencode ."
+echo "Запускаем OpenWork с проектом..."
 echo ""
-echo "Затем скажите: «Хочу философскую сессию»"
-echo ""
+
+# Запускаем OpenWork
+cd "$PROJECT_DIR"
+opencode "$PROJECT_DIR"
