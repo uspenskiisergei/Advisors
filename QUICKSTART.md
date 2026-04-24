@@ -4,7 +4,7 @@
 
 ### Шаг 1: Установите OpenWork
 
-Скачайте с https://opencode.ai/download
+Скачайте с https://openworklabs.com/download
 
 ### Шаг 2: Создайте папку для проекта
 

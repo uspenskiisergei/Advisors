@@ -8,7 +8,7 @@
 
 ### 1. Установите OpenWork
 
-Скачайте: https://opencode.ai/download
+Скачайте: https://openworklabs.com/download
 
 ### 2. Создайте папку
 
