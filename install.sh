@@ -3,21 +3,21 @@
 # ============================================
 # Advisors (Советники) — Установщик для macOS
 # ============================================
-# Автоматически устанавливает OpenCode и проект
+# Использование:
+#   curl -s https://.../install.sh | bash          # one-liner (автоматически)
+#   ./install.sh                                   # интерактивное меню
+#   ./install.sh --install                         # установить и запустить
 # ============================================
-
-set -e
 
 # Цвета
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
 # Папки
 PROJECT_DIR="$HOME/Advisors"
-OPENCODE_APP="$HOME/Applications/OpenCode.app"
 
 # Функции печати
 print_header() {
@@ -28,21 +28,10 @@ print_header() {
     echo ""
 }
 
-print_step() {
-    echo -e "${GREEN}➜ $1${NC}"
-}
-
-print_success() {
-    echo -e "${GREEN}✅ $1${NC}"
-}
-
-print_warning() {
-    echo -e "${YELLOW}⚠️  $1${NC}"
-}
-
-print_error() {
-    echo -e "${RED}❌ $1${NC}"
-}
+print_step() { echo -e "${GREEN}➜ $1${NC}"; }
+print_success() { echo -e "${GREEN}✅ $1${NC}"; }
+print_warning() { echo -e "${YELLOW}⚠️  $1${NC}"; }
+print_error() { echo -e "${RED}❌ $1${NC}"; }
 
 # Проверка macOS
 check_macos() {
@@ -63,39 +52,35 @@ check_brew() {
 # Установка OpenCode
 install_opencode() {
     if command -v opencode &> /dev/null; then
-        print_success "OpenCode уже установлен: $(opencode --version 2>/dev/null || echo 'OK')"
+        print_success "OpenCode уже установлен"
         return 0
     fi
 
     print_step "Устанавливаем OpenCode..."
 
-    # Способ 1: Homebrew
+    # Homebrew
     if command -v brew &> /dev/null; then
-        print_warning "Устанавливаем через Homebrew..."
-        brew install opencode-ai/opencode/opencode
-        print_success "OpenCode установлен через Homebrew!"
+        brew install opencode-ai/opencode/opencode 2>/dev/null || {
+            # Fallback: direct download
+            install_opencode_direct
+        }
+        print_success "OpenCode установлен!"
         return 0
     fi
 
-    # Способ 2: Direct download
+    install_opencode_direct
+}
+
+install_opencode_direct() {
     print_step "Скачиваем OpenCode..."
 
-    # Определяем архитектуру
-    if [[ $(uname -m) == 'arm64' ]]; then
-        ARCH="arm64"
-    else
-        ARCH="x64"
-    fi
-
-    TMP_DIR="/tmp/opencode-install"
+    ARCH=$([[ $(uname -m) == 'arm64' ]] && echo "arm64" || echo "x64")
+    TMP_DIR="/tmp/opencode-install-$$"
     mkdir -p "$TMP_DIR"
 
-    DOWNLOAD_URL="https://github.com/opencode-ai/opencode/releases/latest/download/opencode-darwin-${ARCH}"
-
-    curl -L -o "$TMP_DIR/opencode" "$DOWNLOAD_URL"
+    curl -L -o "$TMP_DIR/opencode" "https://github.com/opencode-ai/opencode/releases/latest/download/opencode-darwin-${ARCH}"
     chmod +x "$TMP_DIR/opencode"
 
-    # Устанавливаем в /usr/local/bin или ~/bin
     if [ -w /usr/local/bin ]; then
         sudo mv "$TMP_DIR/opencode" /usr/local/bin/opencode
     else
@@ -114,7 +99,7 @@ clone_project() {
         print_warning "Проект уже существует в $PROJECT_DIR"
         echo "   Обновляем..."
         cd "$PROJECT_DIR"
-        git pull origin main
+        git pull origin main 2>/dev/null || git pull origin main
     else
         print_step "Клонируем проект в $PROJECT_DIR..."
         git clone git@github.com:uspenskiisergei/Advisors.git "$PROJECT_DIR"
@@ -124,11 +109,10 @@ clone_project() {
 
 # Запуск проекта
 launch_project() {
-    print_step "Запускаем OpenCode с проектом..."
+    print_step "Запускаем OpenCode..."
 
     cd "$PROJECT_DIR"
 
-    # Проверяем, установлен ли OpenCode
     if ! command -v opencode &> /dev/null; then
         print_error "OpenCode не найден. Добавьте в PATH:"
         echo "   export PATH=\"\$HOME/bin:\$PATH\""
@@ -140,12 +124,13 @@ launch_project() {
     echo -e "${GREEN}║${NC}              🎉 Все готово!                     ${GREEN}║${NC}"
     echo -e "${GREEN}╚═══════════════════════════════════════════════════╝${NC}"
     echo ""
+    echo "Скажите агенту: «Хочу философскую сессию»"
+    echo ""
 
-    # Запускаем OpenCode
-    opencode "$PROJECT_DIR"
+    opencode "$PROJECT_DIR" &
 }
 
-# Главное меню
+# Интерактивное меню
 show_menu() {
     print_header
 
@@ -161,6 +146,20 @@ show_menu() {
 # Основной скрипт
 main() {
     check_macos
+
+    # Проверяем, запущен ли через pipe (curl | bash)
+    # Если stdin не терминал — автоматически запускаем установку
+    if [ ! -t 0 ] && [ -z "$1" ]; then
+        # Запущен через pipe без аргументов — автоматическая установка
+        print_header
+        echo "📦 Автоматическая установка..."
+        echo ""
+        check_brew
+        install_opencode
+        clone_project
+        launch_project
+        return 0
+    fi
 
     case "${1:-}" in
         1|--install)
@@ -183,16 +182,17 @@ main() {
                 git pull origin main
                 print_success "Проект обновлён!"
             else
-                print_error "Проект не найден. Используйте установку."
+                print_error "Проект не найден."
                 exit 1
             fi
             ;;
-        4|--help|-h)
+        -h|--help)
             show_menu
             echo "Использование:"
-            echo "  ./install.sh           — интерактивное меню"
-            echo "  ./install.sh --install — установить и запустить"
-            echo "  ./install.sh --update  — обновить проект"
+            echo "  curl -s https://.../install.sh | bash    # one-liner"
+            echo "  ./install.sh --install                  # установить"
+            echo "  ./install.sh --download                  # скачать"
+            echo "  ./install.sh --update                    # обновить"
             ;;
         *)
             show_menu
