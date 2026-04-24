@@ -20,3 +20,9 @@
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+
+# Local files (user-specific, not for repo)
+.opencode/openwork.json
+.opencode/package-lock.json
+.opencode/.openwork-enterprise-creators
+.opencode-router/
