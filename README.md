@@ -40,6 +40,9 @@ git clone git@github.com:uspenskiisergei/Advisors.git .
 Скажите агенту:
 
 ```
+Изучи инструкцию и функции проекта
+
+```
 Хочу философскую сессию
 ```
 
