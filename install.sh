@@ -1,28 +1,20 @@
 #!/bin/bash
 
-# ============================================
 # Advisors — Установщик для macOS
-# ============================================
 # curl -s https://.../install.sh | bash
-# ============================================
 
 set -e
 
-# Цвета
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m'
-
 PROJECT_DIR="$HOME/Advisors"
 
-# Печать
 step() { echo -e "${GREEN}➜${NC} $1"; }
 ok() { echo -e "${GREEN}✅${NC} $1"; }
-warn() { echo -e "${YELLOW}⚠️${NC} $1"; }
 fail() { echo -e "${RED}❌${NC} $1"; }
 
-# Проверка macOS
 if [[ "$OSTYPE" != "darwin"* ]]; then
     fail "Только для macOS!"
     exit 1
@@ -33,7 +25,6 @@ echo "🤖 Advisors — Система философского мышления
 echo "============================================"
 echo ""
 
-# OpenCode
 step "Проверяем OpenWork..."
 if command -v opencode &> /dev/null; then
     ok "OpenWork уже установлен"
@@ -61,14 +52,13 @@ install_direct() {
     fi
 }
 
-# Проект
 step "Скачиваем проект..."
 if [ -d "$PROJECT_DIR" ]; then
     cd "$PROJECT_DIR" && git pull origin main 2>/dev/null
-    ok "Проект обновлён в $PROJECT_DIR"
+    ok "Проект обновлён"
 else
     git clone git@github.com:uspenskiisergei/Advisors.git "$PROJECT_DIR"
-    ok "Проект скачан в $PROJECT_DIR"
+    ok "Проект скачан"
 fi
 
 echo ""
@@ -76,9 +66,8 @@ echo "============================================"
 ok "Всё готово!"
 echo "============================================"
 echo ""
-echo "Запускаем OpenWork с проектом..."
+echo "Запускаем OpenWork..."
 echo ""
 
-# Запускаем OpenWork
 cd "$PROJECT_DIR"
 opencode "$PROJECT_DIR"
