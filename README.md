@@ -1,3 +1,4 @@
+<img width="1536" height="1024" alt="img_69eb687a4ea925 66840900" src="https://github.com/user-attachments/assets/df25bfcc-a593-4f7c-8e2c-6ce0943b3eea" />
 # Advisors
 Советники — 11 величайших мыслителей в твоей команде
 
