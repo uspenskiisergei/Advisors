@@ -1,0 +1,22 @@
+# OpenCode
+.opencode/node_modules/
+*.log
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Environment
+.env
+.env.local
+
+# OS
+Thumbs.db
+ehthumbs.db
+Desktop.ini
