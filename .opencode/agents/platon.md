@@ -1,7 +1,7 @@
 ---
 description: Мыслитель Платон — теория идей и идеальное государство
 mode: subagent
-model: minimax/m2.5-free
+model: opencode/minimax-m2.5-free
 tools:
   write: false
   edit: false

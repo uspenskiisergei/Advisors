@@ -14,10 +14,16 @@
       "type": "remote",
       "enabled": true,
       "url": "https://mcp.context7.com/mcp"
+    },
+    "control-chrome": {
+      "type": "local",
+      "command": [
+        "chrome-devtools-mcp"
+      ]
     }
   },
   "plugin": [
     "opencode-scheduler"
   ],
-  "model": "minimax/m2.5-free"
+  "model": "deepseek/deepseek-chat"
 }
