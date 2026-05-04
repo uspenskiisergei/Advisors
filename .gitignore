@@ -31,4 +31,5 @@ Desktop.ini
 .obsidian/
 # OpenCode (локальные данные)
 .opencode/.openwork-enterprise-creators
-opencode.jsonc
+opencode.jsonc.obsidian/
+.opencode/openwork/
