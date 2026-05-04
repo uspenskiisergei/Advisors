@@ -25,5 +25,5 @@
   "plugin": [
     "opencode-scheduler"
   ],
-  "model": "deepseek/deepseek-chat"
+  "model": "opencode/minimax-m2.5-free"
 }
