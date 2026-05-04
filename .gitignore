@@ -26,3 +26,9 @@ Desktop.ini
 .opencode/package-lock.json
 .opencode/.openwork-enterprise-creators
 .opencode-router/
+
+# Obsidian (локальные настройки)
+.obsidian/
+# OpenCode (локальные данные)
+.opencode/.openwork-enterprise-creators
+opencode.jsonc
